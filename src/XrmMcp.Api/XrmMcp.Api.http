@@ -1,0 +1,6 @@
+@XrmMcp.Api_HostAddress = http://localhost:5001
+
+GET {{XrmMcp.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/XrmMcp.Api/XrmMcp.Api.csproj" />
+    <Project Path="src/XrmMcp.Core/XrmMcp.Core.csproj" />
+    <Project Path="src/XrmMcp.Infrastructure/XrmMcp.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/XrmMcp.Tests.Integration/XrmMcp.Tests.Integration.csproj" />
+    <Project Path="tests/XrmMcp.Tests.Unit/XrmMcp.Tests.Unit.csproj" />
+  </Folder>
+</Solution>
