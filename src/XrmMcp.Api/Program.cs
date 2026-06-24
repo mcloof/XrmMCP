@@ -1,3 +1,6 @@
+using XrmMcp.Core;
+using XrmMcp.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
@@ -12,6 +15,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Model Context Protocol Server for Dynamics 365 / Dataverse"
     });
 });
+
+builder.Services.AddSingleton<IXrmConnectionService, XrmConnectionService>();
 
 var app = builder.Build();
 
@@ -35,9 +40,17 @@ app.MapGet("/health", () => Results.Ok(new
 {
     status = "healthy",
     timestamp = DateTime.UtcNow,
-    version = "0.1.0-phase0"
+    version = "0.2.0-phase1"
 }))
 .WithName("HealthCheck")
 .WithTags("System");
+
+app.MapPost("/api/connections/test", async (XrmConnectionOptions request, IXrmConnectionService connectionService, CancellationToken cancellationToken) =>
+{
+    var result = await connectionService.TestConnectionAsync(request, cancellationToken);
+    return result.IsSuccess ? Results.Ok(result) : Results.BadRequest(result);
+})
+.WithName("TestConnection")
+.WithTags("Connections");
 
 app.Run();

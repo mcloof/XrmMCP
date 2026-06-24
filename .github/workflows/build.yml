@@ -23,10 +23,17 @@ jobs:
       run: dotnet restore
 
     - name: Build solution
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore -warnaserror
 
     - name: Run unit tests
       run: dotnet test tests/XrmMcp.Tests.Unit/XrmMcp.Tests.Unit.csproj --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+
+    - name: Run integration tests (optional)
+      if: ${{ secrets.XRMMCP_ONLINE_CONNECTION_STRING != '' || secrets.XRMMCP_ONPREM_CONNECTION_STRING != '' }}
+      env:
+        XRMMCP_ONLINE_CONNECTION_STRING: ${{ secrets.XRMMCP_ONLINE_CONNECTION_STRING }}
+        XRMMCP_ONPREM_CONNECTION_STRING: ${{ secrets.XRMMCP_ONPREM_CONNECTION_STRING }}
+      run: dotnet test tests/XrmMcp.Tests.Integration/XrmMcp.Tests.Integration.csproj --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=integration-test-results.trx"
 
     - name: Publish test results
       uses: dorny/test-reporter@v1
@@ -36,14 +43,10 @@ jobs:
         path: '**/test-results.trx'
         reporter: dotnet-trx
 
-    - name: Check for build warnings
-      run: |
-        $warnings = dotnet build --no-restore 2>&1 | Select-String "warning"
-        if ($warnings) {
-          Write-Host "⚠️ Build warnings detected:"
-          Write-Host $warnings
-          exit 1
-        } else {
-          Write-Host "✅ No build warnings"
-        }
-      shell: pwsh
+    - name: Publish integration test results
+      uses: dorny/test-reporter@v1
+      if: (success() || failure()) && hashFiles('**/integration-test-results.trx') != ''
+      with:
+        name: Integration Test Results
+        path: '**/integration-test-results.trx'
+        reporter: dotnet-trx
