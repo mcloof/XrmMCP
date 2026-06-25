@@ -1,6 +1,6 @@
 using Xunit;
-using XrmMcp.Core;
-using XrmMcp.Infrastructure;
+using XrmMcp.Core.Models;
+using XrmMcp.Infrastructure.Services;
 using Xunit.Sdk;
 
 namespace XrmMcp.Tests.Integration;

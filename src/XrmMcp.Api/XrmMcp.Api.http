@@ -1,6 +1,55 @@
 @XrmMcp.Api_HostAddress = http://localhost:5001
 
-GET {{XrmMcp.Api_HostAddress}}/weatherforecast/
+### Health check
+GET {{XrmMcp.Api_HostAddress}}/health
 Accept: application/json
 
-###
+### Test connection (Online OAuth)
+POST {{XrmMcp.Api_HostAddress}}/api/connections/test
+Content-Type: application/json
+
+{
+  "name": "Online",
+  "authType": 0,
+  "connectionString": "{{ONLINE_CONNECTION_STRING}}"
+}
+
+### List entities (POC)
+POST {{XrmMcp.Api_HostAddress}}/api/poc/entities
+Content-Type: application/json
+
+{
+  "name": "Online",
+  "authType": 0,
+  "connectionString": "{{ONLINE_CONNECTION_STRING}}"
+}
+
+### Entity details (POC)
+POST {{XrmMcp.Api_HostAddress}}/api/poc/entities/account
+Content-Type: application/json
+
+{
+  "name": "Online",
+  "authType": 0,
+  "connectionString": "{{ONLINE_CONNECTION_STRING}}"
+}
+
+### Test connection (OnPrem AD)
+POST {{XrmMcp.Api_HostAddress}}/api/connections/test
+Content-Type: application/json
+
+{
+  "name": "OnPrem",
+  "authType": 1,
+  "connectionString": "{{ONPREM_CONNECTION_STRING}}"
+}
+
+### List entities (OnPrem POC)
+POST {{XrmMcp.Api_HostAddress}}/api/poc/entities
+Content-Type: application/json
+
+{
+  "name": "OnPrem",
+  "authType": 1,
+  "connectionString": "{{ONPREM_CONNECTION_STRING}}"
+}

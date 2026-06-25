@@ -1,6 +1,6 @@
 using FluentAssertions;
-using XrmMcp.Core;
-using XrmMcp.Infrastructure;
+using XrmMcp.Core.Models;
+using XrmMcp.Infrastructure.Services;
 
 namespace XrmMcp.Tests.Unit;
 
